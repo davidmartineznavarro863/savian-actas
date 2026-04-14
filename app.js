@@ -109,7 +109,10 @@ const devicesList = ['Blackview Pro','Blackview Plus','Bridas','KIT SENSORES','E
 ══════════════════════════════════════════════════ */
 
 const hoy = new Date().toISOString().split('T')[0];
-document.getElementById('fecha').value = hoy;
+const fechaInput = document.getElementById('fecha');
+if (fechaInput) {
+  fechaInput.value = hoy;
+}
 
 // Poblar select de clientes
 (function() {
