@@ -780,7 +780,7 @@ if (tipoWrap && tipoActivo) {
 /* ══════════════════════════════════════════════════
    📧  ENVÍO DE CORREO — sólo al administrador
 ══════════════════════════════════════════════════ */
-async function enviarCorreos(nombre) {
+async function enviarCorreos(nombre, pdf) {
   const cli      = document.getElementById('cliente').value  || '-';
   const centro   = document.getElementById('centro').value   || '-';
   const trabajos = document.getElementById('trabajos').value || '-';
@@ -788,13 +788,29 @@ async function enviarCorreos(nombre) {
   const partes   = fv.split('-');
   const fecha    = fv ? `${partes[2]}/${partes[1]}/${partes[0]}` : '-';
 
-  // Recoger técnicos
-  const filas   = [...document.querySelectorAll('#trabajadores .worker-nombre')];
-  const tecnicos = filas
-    .map(i => i.value?.trim())
-    .filter(Boolean)
-    .join(', ') || '-';
+  const filas    = [...document.querySelectorAll('#trabajadores .worker-nombre')];
+  const tecnicos = filas.map(i => i.value?.trim()).filter(Boolean).join(', ') || '-';
 
+  // ── Subir PDF a Google Drive ──
+  try {
+    const pdfBase64 = pdf.output('datauristring').split(',')[1];
+    const res = await fetch('https://savian-drive-uploader-e6fyh7d8fxg4fuah.westeurope-01.azurewebsites.net/api/uploadDrive?code=nJP6ojA7pFbUZjso-UwGDA7_cTFotDOXBc5YSqxP9EOiAzFupYfkDg==', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pdfBase64,
+        fileName: nombre + '.pdf'
+      })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error);
+    showToast('✅ PDF guardado en Drive correctamente', 'success');
+  } catch (e) {
+    console.error('Error Drive:', e);
+    showToast('⚠️ No se pudo guardar en Drive.\n' + e.message, 'warn');
+  }
+
+  // ── Notificación por correo (sin adjunto) ──
   const cuerpo = [
     `📋 NUEVA ACTA DE VISITA TÉCNICA`,
     ``,
@@ -806,6 +822,8 @@ async function enviarCorreos(nombre) {
     ``,
     `Trabajos realizados:`,
     trabajos,
+    ``,
+    `📁 PDF disponible en Google Drive: Actas Savian`
   ].join('\n');
 
   try {
@@ -822,10 +840,8 @@ async function enviarCorreos(nombre) {
     });
     const data = await res.json();
     if (!data.success) throw new Error(data.message);
-    showToast('✅ PDF generado y correo enviado', 'success');
   } catch (e) {
     console.error('Error correo:', e);
-    showToast('⚠️ PDF generado.\nNo se pudo enviar el correo.', 'warn');
   }
 }
 
@@ -967,6 +983,7 @@ async function completar() {
     _pdfBlobUrl = URL.createObjectURL(blob);
 
     setLoading(false);
+     enviarCorreos(nombre, pdf);
     mostrarOverlayPDF(nombre);
 
   } catch (err) {
