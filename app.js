@@ -793,7 +793,10 @@ async function enviarCorreos(nombre, pdf) {
 
   // ── Subir PDF a Google Drive ──
   try {
-    const pdfBase64 = pdf.output('datauristring').split(',')[1];
+    const pdfBase64 = btoa(
+  new Uint8Array(pdf.output('arraybuffer'))
+    .reduce((data, byte) => data + String.fromCharCode(byte), '')
+);
     const res = await fetch('https://savian-drive-uploader-e6fyh7d8fxg4fuah.westeurope-01.azurewebsites.net/api/uploadDrive?code=nJP6ojA7pFbUZjso-UwGDA7_cTFotDOXBc5YSqxP9EOiAzFupYfkDg==', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
