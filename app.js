@@ -114,17 +114,6 @@ if (fechaInput) {
   fechaInput.value = hoy;
 }
 
-// Poblar select de clientes
-(function() {
-  const sel = document.getElementById('cliente');
-  Object.keys(clientData).sort().forEach(nombre => {
-    const opt = document.createElement('option');
-    opt.value = nombre;
-    opt.textContent = nombre;
-    sel.appendChild(opt);
-  });
-})();
-
 /* ══════════════════════════════════════════════════
    🔽  SELECT NATIVO — funciones de selección
 ══════════════════════════════════════════════════ */
@@ -164,13 +153,16 @@ function onComboInput(id, val) {
   poblarCombo(id, val);
   abrirCombo(id);
   if (id === 'cliente') {
-    // Reset centro al cambiar cliente
-    document.getElementById('centro').value = '';
+    const cli = val.trim();
+    // Solo limpiar centro y loc si el texto no coincide con ningún cliente conocido
+    if (!clientData[cli]) {
+      document.getElementById('centro').value = '';
+      document.getElementById('loc').value = '';
+    }
+    // Repoblar la lista de centros según el cliente actual
     poblarCombo('centro', '');
-    document.getElementById('loc').value = '';
   }
 }
-
 // Construye las opciones del combo
 function poblarCombo(id, filtro) {
   const list = document.getElementById('combo-lista-' + id);
@@ -994,28 +986,46 @@ function confirmarReset() {
   resetForm();
 }
 function resetForm() {
+  // Fecha: hoy
   document.getElementById('fecha').value = hoy;
 
-  // Reset selects nativos
-  const selCliente = document.getElementById('cliente');
-  const selCentro  = document.getElementById('centro');
-  selCliente.value = '';
-  selCliente.classList.add('placeholder-active');
-  selCentro.innerHTML = '<option value="">Seleccionar centro...</option>';
-  selCentro.classList.add('placeholder-active');
+  // Combo cliente: limpiar valor y reconstruir lista
+  const inpCliente = document.getElementById('cliente');
+  inpCliente.value = '';
+  cerrarCombos();
+  poblarCombo('cliente', '');
 
-  document.getElementById('loc').value='';
-  document.getElementById('trabajadores').innerHTML=''; wc=0; for(let i=0;i<2;i++) addWorker();
-  document.getElementById('deviceRows').innerHTML='';   dc=0; for(let i=0;i<5;i++) addDevice();
-  tipoActivo='';
+  // Combo centro: limpiar valor y reconstruir lista
+  const inpCentro = document.getElementById('centro');
+  inpCentro.value = '';
+  poblarCombo('centro', '');
+
+  // Localización
+  document.getElementById('loc').value = '';
+
+  // Trabajadores: 2 por defecto
+  document.getElementById('trabajadores').innerHTML = '';
+  wc = 0;
+  for (let i = 0; i < 2; i++) addWorker();
+
+  // Dispositivos: sin filas iniciales (igual que al cargar la página)
+  document.getElementById('deviceRows').innerHTML = '';
+  dc = 0;
+
+  // Tipo de trabajo
+  tipoActivo = '';
   document.getElementById('btn-incidencia').classList.remove('active');
   document.getElementById('btn-visita').classList.remove('active');
-  document.getElementById('chk-incidencia').textContent='';
-  document.getElementById('chk-visita').textContent='';
-  document.getElementById('trabajos').value='';
-  limpiarFirma(1); limpiarFirma(2);
-}
+  document.getElementById('chk-incidencia').textContent = '';
+  document.getElementById('chk-visita').textContent = '';
 
+  // Trabajos realizados
+  document.getElementById('trabajos').value = '';
+
+  // Firmas
+  limpiarFirma(1);
+  limpiarFirma(2);
+}
 /* ══════════════════════════════════════════════════
    🎨  UI HELPERS
 ══════════════════════════════════════════════════ */
