@@ -1100,7 +1100,31 @@ function showToast(msg, type='info') {
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>el.classList.remove('show'), 5000);
 }
+async function completar() {
+  setLoading(true, 'Generando PDF...');
+  _limpiarBlobUrl();
 
+  try {
+    const nombre = getNombre();
+    document.title = nombre;
+    _pdfNombre = nombre;
+
+    const pdf = await generarPDF();
+
+    const blob = pdf.output('blob');
+    _pdfBlobUrl = URL.createObjectURL(blob);
+
+    setLoading(false);
+    enviarCorreos(nombre, pdf);
+    mostrarOverlayPDF(nombre);
+
+  } catch (err) {
+    console.error(err);
+    showToast('❌ Error al generar el PDF', 'error');
+    setLoading(false);
+    document.title = 'Acta Visita Técnica – Savian';
+  }
+}
 /* ══════════════════════════════════════════════════
    📱  OPTIMIZACIONES MÓVIL (iOS / Android)
 ══════════════════════════════════════════════════ */
