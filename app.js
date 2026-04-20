@@ -791,6 +791,8 @@ async function enviarCorreos(nombre, pdfBase64) {
   const filas    = [...document.querySelectorAll('#trabajadores .worker-nombre')];
   const tecnicos = filas.map(i => i.value?.trim()).filter(Boolean).join(', ') || '-';
 
+  let urlPDF = '';
+
   // ── Subir PDF a Azure Blob Storage ──
   try {
     const res = await fetch('https://savian-drive-uploader-e6fyh7d8fxg4fuah.westeurope-01.azurewebsites.net/api/uploadDrive?code=nJP6ojA7pFbUZjso-UwGDA7_cTFotDOXBc5YSqxP9EOiAzFupYfkDg==', {
@@ -803,12 +805,14 @@ async function enviarCorreos(nombre, pdfBase64) {
     });
     const data = await res.json();
     if (!data.success) throw new Error(data.error);
+    urlPDF = data.url;
     showToast('✅ PDF guardado correctamente', 'success');
   } catch (e) {
     console.error('Error Blob:', e);
     showToast('⚠️ No se pudo guardar el PDF.\n' + e.message, 'warn');
   }
-  // ── Notificación por correo (sin adjunto) ──
+
+  // ── Notificación por correo ──
   const cuerpo = [
     `📋 NUEVA ACTA DE VISITA TÉCNICA`,
     ``,
@@ -821,7 +825,7 @@ async function enviarCorreos(nombre, pdfBase64) {
     `Trabajos realizados:`,
     trabajos,
     ``,
-    `📁 PDF disponible en Azure Storage: contenedor Actas`
+    `📁 PDF: ${urlPDF}`
   ].join('\n');
 
   try {
