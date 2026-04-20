@@ -1114,11 +1114,17 @@ async function completar() {
 
     const pdf = await generarPDF();
 
+    // Convertir a base64 aquí, donde sabemos que pdf existe
+    const pdfBase64 = btoa(
+      new Uint8Array(pdf.output('arraybuffer'))
+        .reduce((data, byte) => data + String.fromCharCode(byte), '')
+    );
+
     const blob = pdf.output('blob');
     _pdfBlobUrl = URL.createObjectURL(blob);
 
     setLoading(false);
-    enviarCorreos(nombre, pdf);
+    enviarCorreos(nombre, pdfBase64);
     mostrarOverlayPDF(nombre);
 
   } catch (err) {
