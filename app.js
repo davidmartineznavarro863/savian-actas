@@ -780,7 +780,7 @@ if (tipoWrap && tipoActivo) {
 /* ══════════════════════════════════════════════════
    📧  ENVÍO DE CORREO — sólo al administrador
 ══════════════════════════════════════════════════ */
-async function enviarCorreos(nombre, pdf) {
+async function enviarCorreos(nombre, pdfBase64) {
   const cli      = document.getElementById('cliente').value  || '-';
   const centro   = document.getElementById('centro').value   || '-';
   const trabajos = document.getElementById('trabajos').value || '-';
@@ -793,10 +793,6 @@ async function enviarCorreos(nombre, pdf) {
 
   // ── Subir PDF a Google Drive ──
   try {
-    const pdfBase64 = btoa(
-  new Uint8Array(pdf.output('arraybuffer'))
-    .reduce((data, byte) => data + String.fromCharCode(byte), '')
-);
     const res = await fetch('https://savian-drive-uploader-e6fyh7d8fxg4fuah.westeurope-01.azurewebsites.net/api/uploadDrive?code=nJP6ojA7pFbUZjso-UwGDA7_cTFotDOXBc5YSqxP9EOiAzFupYfkDg==', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -812,7 +808,6 @@ async function enviarCorreos(nombre, pdf) {
     console.error('Error Drive:', e);
     showToast('⚠️ No se pudo guardar en Drive.\n' + e.message, 'warn');
   }
-
   // ── Notificación por correo (sin adjunto) ──
   const cuerpo = [
     `📋 NUEVA ACTA DE VISITA TÉCNICA`,
