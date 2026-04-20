@@ -791,7 +791,7 @@ async function enviarCorreos(nombre, pdfBase64) {
   const filas    = [...document.querySelectorAll('#trabajadores .worker-nombre')];
   const tecnicos = filas.map(i => i.value?.trim()).filter(Boolean).join(', ') || '-';
 
-  // ── Subir PDF a Google Drive ──
+  // ── Subir PDF a Azure Blob Storage ──
   try {
     const res = await fetch('https://savian-drive-uploader-e6fyh7d8fxg4fuah.westeurope-01.azurewebsites.net/api/uploadDrive?code=nJP6ojA7pFbUZjso-UwGDA7_cTFotDOXBc5YSqxP9EOiAzFupYfkDg==', {
       method: 'POST',
@@ -803,10 +803,10 @@ async function enviarCorreos(nombre, pdfBase64) {
     });
     const data = await res.json();
     if (!data.success) throw new Error(data.error);
-    showToast('✅ PDF guardado en Drive correctamente', 'success');
+    showToast('✅ PDF guardado correctamente', 'success');
   } catch (e) {
-    console.error('Error Drive:', e);
-    showToast('⚠️ No se pudo guardar en Drive.\n' + e.message, 'warn');
+    console.error('Error Blob:', e);
+    showToast('⚠️ No se pudo guardar el PDF.\n' + e.message, 'warn');
   }
   // ── Notificación por correo (sin adjunto) ──
   const cuerpo = [
@@ -821,7 +821,7 @@ async function enviarCorreos(nombre, pdfBase64) {
     `Trabajos realizados:`,
     trabajos,
     ``,
-    `📁 PDF disponible en Google Drive: Actas Savian`
+    `📁 PDF disponible en Azure Storage: contenedor Actas`
   ].join('\n');
 
   try {
