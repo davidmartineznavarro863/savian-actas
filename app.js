@@ -825,7 +825,7 @@ async function enviarCorreos(nombre, pdfBase64) {
     `Trabajos realizados:`,
     trabajos,
     ``,
-    `📁 PDF: ${urlPDF}`
+    `📁 PDF (copia en el navegador): ${urlPDF.replace('https://', 'https :// ')}`
   ].join('\n');
 
   try {
