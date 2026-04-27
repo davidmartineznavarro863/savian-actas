@@ -11,11 +11,10 @@
 
 ══════════════════════════════════════════════════ */
 const CONFIG = {
-  web3forms_key: 'b520a556-6737-4dce-91fa-ccf9d32a08a7',
-  admin_email: 'davidmartineznavarro863@gmail.com',
+  web3forms_key: 'NUEVA_CLAVE_DE_jythurrrr@gmail.com', // ← clave generada con ese email
+  admin_email: 'jythurrrr@gmail.com',                  // ← nuevo destinatario
   from_name: 'Savian'
 };
-
 /* ══════════════════════════════════════════════════
    📋  DATOS DE CLIENTES — Añade el email de cada uno
 ══════════════════════════════════════════════════ */
@@ -814,19 +813,21 @@ async function enviarCorreos(nombre, pdfBase64) {
 
   // ── Notificación por correo ──
   const cuerpo = [
-    `📋 NUEVA ACTA DE VISITA TÉCNICA`,
-    ``,
-    `Cliente  : ${cli}`,
-    `Centro   : ${centro}`,
-    `Fecha    : ${fecha}`,
-    `Tipo     : ${tipoActivo || 'Visita'}`,
-    `Técnicos : ${tecnicos}`,
-    ``,
-    `Trabajos realizados:`,
-    trabajos,
-    ``,
-    `📁 PDF (copia en el navegador): ${urlPDF.replace('https://', 'https :// ')}`
-  ].join('\n');
+  `📋 NUEVA ACTA DE VISITA TÉCNICA`,
+  ``,
+  `Cliente  : ${cli}`,
+  `Centro   : ${centro}`,
+  `Fecha    : ${fecha}`,
+  `Tipo     : ${tipoActivo || 'Visita'}`,
+  `Técnicos : ${tecnicos}`,
+  ``,
+  `Trabajos realizados:`,
+  trabajos,
+  ``,
+  `📁 PDF (copia en el navegador): ${urlPDF.replace('https://', 'https :// ')}`,
+  ``,
+  `🗂️ Repositorio de actas: https://portal.azure.com/#view/Microsoft_Azure_Storage/ContainerMenuBlade/~/overview/storageAccountId/%2Fsubscriptions%2F405cbea3-4aad-4b90-b7c5-0edbccca60ca%2FresourceGroups%2Fsavian-recursos%2Fproviders%2FMicrosoft.Storage%2FstorageAccounts%2Fsavianpdfs/path/actas/etag/%220x8DE9EA9112C6E75%22/defaultId//publicAccessVal/Blob`
+].join('\n');
 
   try {
     const res = await fetch('https://api.web3forms.com/submit', {
