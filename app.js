@@ -813,20 +813,20 @@ async function enviarCorreos(nombre, pdfBase64) {
 
   // ── Notificación por correo ──
   const cuerpo = [
-  `📋 NUEVA ACTA DE VISITA TÉCNICA`,
+  `Nueva acta de visita tecnica`,
   ``,
-  `Cliente  : ${cli}`,
-  `Centro   : ${centro}`,
-  `Fecha    : ${fecha}`,
-  `Tipo     : ${tipoActivo || 'Visita'}`,
-  `Técnicos : ${tecnicos}`,
+  `Cliente: ${cli}`,
+  `Centro: ${centro}`,
+  `Fecha: ${fecha}`,
+  `Tipo: ${tipoActivo || 'Visita'}`,
+  `Tecnicos: ${tecnicos}`,
   ``,
   `Trabajos realizados:`,
   trabajos,
   ``,
-  `📁 PDF (copia en el navegador): ${urlPDF.replace('https://', 'https :// ')}`,
+  `PDF: ${urlPDF}`,
   ``,
-  `🗂️ Repositorio de actas: https://portal.azure.com/#view/Microsoft_Azure_Storage/ContainerMenuBlade/~/overview/storageAccountId/%2Fsubscriptions%2F405cbea3-4aad-4b90-b7c5-0edbccca60ca%2FresourceGroups%2Fsavian-recursos%2Fproviders%2FMicrosoft.Storage%2FstorageAccounts%2Fsavianpdfs/path/actas/etag/%220x8DE9EA9112C6E75%22/defaultId//publicAccessVal/Blob`
+  `Repositorio: https://portal.azure.com/#view/Microsoft_Azure_Storage/ContainerMenuBlade/~/overview/storageAccountId/%2Fsubscriptions%2F405cbea3-4aad-4b90-b7c5-0edbccca60ca%2FresourceGroups%2Fsavian-recursos%2Fproviders%2FMicrosoft.Storage%2FstorageAccounts%2Fsavianpdfs/path/actas/etag/%220x8DE9EA9112C6E75%22/defaultId//publicAccessVal/Blob`
 ].join('\n');
 
   try {
