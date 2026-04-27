@@ -11,8 +11,8 @@
 
 ══════════════════════════════════════════════════ */
 const CONFIG = {
-  web3forms_key: 'b520a556-6737-4dce-91fa-ccf9d32a08a7', // ← clave generada con ese email
-  admin_email: 'davidmartineznavarro863@gmail.com',                  // ← nuevo destinatario
+  web3forms_key: 'b520a556-6737-4dce-91fa-ccf9d32a08a7',
+  admin_email: 'davidmartineznavarro863@gmail.com',
   from_name: 'Savian'
 };
 /* ══════════════════════════════════════════════════
