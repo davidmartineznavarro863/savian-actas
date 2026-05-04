@@ -1165,32 +1165,65 @@ function abrirFirmaModal(id) {
   const dpr = window.devicePixelRatio || 2;
   cv.width  = cv.offsetWidth  * dpr;
   cv.height = cv.offsetHeight * dpr;
+
   const ctx = cv.getContext('2d');
   ctx.scale(dpr, dpr);
-  ctx.strokeStyle = '#111'; ctx.lineWidth = 2.5;
-  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+  // 🔥 GROSOR CORREGIDO (adaptado a pantalla)
+  ctx.strokeStyle = '#111';
+  ctx.lineWidth = 3.5 * dpr;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
 
   let dr = false, lx = 0, ly = 0;
+
   function pos(e) {
     const rc = cv.getBoundingClientRect();
     const sx = cv.width / dpr / rc.width;
     const sy = cv.height / dpr / rc.height;
-    if (e.touches && e.touches.length > 0)
-      return [(e.touches[0].clientX - rc.left) * sx, (e.touches[0].clientY - rc.top) * sy];
-    return [(e.clientX - rc.left) * sx, (e.clientY - rc.top) * sy];
+
+    if (e.touches && e.touches.length > 0) {
+      return [
+        (e.touches[0].clientX - rc.left) * sx,
+        (e.touches[0].clientY - rc.top) * sy
+      ];
+    }
+    return [
+      (e.clientX - rc.left) * sx,
+      (e.clientY - rc.top) * sy
+    ];
   }
-  cv.addEventListener('mousedown',  e => { e.preventDefault(); dr = true; [lx,ly] = pos(e); });
-  cv.addEventListener('touchstart', e => { e.preventDefault(); dr = true; [lx,ly] = pos(e); }, {passive:false});
+
+  cv.addEventListener('mousedown', e => {
+    e.preventDefault();
+    dr = true;
+    [lx, ly] = pos(e);
+  });
+
+  cv.addEventListener('touchstart', e => {
+    e.preventDefault();
+    dr = true;
+    [lx, ly] = pos(e);
+  }, { passive: false });
+
   function draw(e) {
-    if (!dr) return; e.preventDefault();
-    const [x,y] = pos(e);
-    ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(x,y); ctx.stroke();
-    [lx,ly] = [x,y];
+    if (!dr) return;
+    e.preventDefault();
+
+    const [x, y] = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(lx, ly);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    [lx, ly] = [x, y];
   }
-  cv.addEventListener('mousemove',  draw);
-  cv.addEventListener('touchmove',  draw, {passive:false});
-  cv.addEventListener('mouseup',    () => dr = false);
-  cv.addEventListener('touchend',   () => dr = false);
+
+  cv.addEventListener('mousemove', draw);
+  cv.addEventListener('touchmove', draw, { passive: false });
+
+  cv.addEventListener('mouseup', () => dr = false);
+  cv.addEventListener('touchend', () => dr = false);
   cv.addEventListener('mouseleave', () => dr = false);
 
   // Borrar
@@ -1207,13 +1240,18 @@ function abrirFirmaModal(id) {
     const origBx = document.getElementById('firmaBox' + id);
     const ph = origBx.querySelector('.firma-placeholder');
     const r  = origBx.getBoundingClientRect();
+
     origCv.width  = r.width  * dpr;
     origCv.height = r.height * dpr;
     origCv.style.display = 'block';
+
     if (ph) ph.style.display = 'none';
+
     const origCtx = origCv.getContext('2d');
     origCtx.scale(dpr, dpr);
+
     origCtx.drawImage(cv, 0, 0, r.width, r.height);
+
     fS[id] = true;
     overlay.remove();
   };
