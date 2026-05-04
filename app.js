@@ -1116,3 +1116,105 @@ document.addEventListener('focusin', (e) => {
     }, 300);
   }
 }, { passive: true });
+/* ══════════════════════════════════════════════════
+   📱  FIRMA MÓVIL (iOS / Android)
+══════════════════════════════════════════════════ */
+function abrirFirmaModal(id) {
+  // Crear overlay fullscreen
+  const overlay = document.createElement('div');
+  overlay.id = 'firmaModalOverlay';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 9999;
+    background: #fff;
+    display: flex; flex-direction: column;
+  `;
+
+  overlay.innerHTML = `
+    <div style="background:#1a8a7a;padding:14px 16px;display:flex;
+                align-items:center;justify-content:space-between;">
+      <span style="color:white;font-weight:700;font-size:16px;font-family:'DM Sans',sans-serif;">
+        ✍️ Firma del cliente
+      </span>
+      <button id="btnBorrarModal"
+        style="background:rgba(255,255,255,.2);border:none;color:white;
+               padding:8px 14px;border-radius:8px;font-size:14px;cursor:pointer;">
+        🗑 Borrar
+      </button>
+    </div>
+    <canvas id="firmaModalCanvas"
+      style="flex:1;width:100%;touch-action:none;display:block;cursor:crosshair;"></canvas>
+    <div style="padding:12px;display:flex;gap:10px;">
+      <button id="btnCancelarModal"
+        style="flex:1;padding:16px;border:1.5px solid #ccc;border-radius:12px;
+               background:white;font-size:16px;font-family:'DM Sans',sans-serif;cursor:pointer;">
+        Cancelar
+      </button>
+      <button id="btnAceptarModal"
+        style="flex:2;padding:16px;background:#1a8a7a;color:white;border:none;
+               border-radius:12px;font-size:16px;font-weight:700;
+               font-family:'DM Sans',sans-serif;cursor:pointer;">
+        ✓ Hecho
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  // Configurar canvas modal
+  const cv = document.getElementById('firmaModalCanvas');
+  const dpr = window.devicePixelRatio || 2;
+  cv.width  = cv.offsetWidth  * dpr;
+  cv.height = cv.offsetHeight * dpr;
+  const ctx = cv.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.strokeStyle = '#111'; ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+  let dr = false, lx = 0, ly = 0;
+  function pos(e) {
+    const rc = cv.getBoundingClientRect();
+    const sx = cv.width / dpr / rc.width;
+    const sy = cv.height / dpr / rc.height;
+    if (e.touches && e.touches.length > 0)
+      return [(e.touches[0].clientX - rc.left) * sx, (e.touches[0].clientY - rc.top) * sy];
+    return [(e.clientX - rc.left) * sx, (e.clientY - rc.top) * sy];
+  }
+  cv.addEventListener('mousedown',  e => { e.preventDefault(); dr = true; [lx,ly] = pos(e); });
+  cv.addEventListener('touchstart', e => { e.preventDefault(); dr = true; [lx,ly] = pos(e); }, {passive:false});
+  function draw(e) {
+    if (!dr) return; e.preventDefault();
+    const [x,y] = pos(e);
+    ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(x,y); ctx.stroke();
+    [lx,ly] = [x,y];
+  }
+  cv.addEventListener('mousemove',  draw);
+  cv.addEventListener('touchmove',  draw, {passive:false});
+  cv.addEventListener('mouseup',    () => dr = false);
+  cv.addEventListener('touchend',   () => dr = false);
+  cv.addEventListener('mouseleave', () => dr = false);
+
+  // Borrar
+  document.getElementById('btnBorrarModal').onclick = () =>
+    ctx.clearRect(0, 0, cv.width / dpr, cv.height / dpr);
+
+  // Cancelar
+  document.getElementById('btnCancelarModal').onclick = () =>
+    overlay.remove();
+
+  // Aceptar → copiar al canvas original
+  document.getElementById('btnAceptarModal').onclick = () => {
+    const origCv = document.getElementById('firma' + id);
+    const origBx = document.getElementById('firmaBox' + id);
+    const ph = origBx.querySelector('.firma-placeholder');
+    const r  = origBx.getBoundingClientRect();
+    origCv.width  = r.width  * dpr;
+    origCv.height = r.height * dpr;
+    origCv.style.display = 'block';
+    if (ph) ph.style.display = 'none';
+    const origCtx = origCv.getContext('2d');
+    origCtx.scale(dpr, dpr);
+    origCtx.drawImage(cv, 0, 0, r.width, r.height);
+    fS[id] = true;
+    overlay.remove();
+  };
+}
