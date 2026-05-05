@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>MODO GUERRA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:  #0a0a0a;
+  --dark:   #111111;
+  --card:   #161616;
+  --border: #222222;
+  --orange: #FF5500;
+  --hot:    #FF7300;
+  --red:    #FF2222;
+  --green:  #00FF88;
+  --white:  #F0EDE8;
+  --grey:   #444444;
+  --muted:  #777777;
+  --F:      'Bebas Neue', sans-serif;
+  --FU:     'Barlow Condensed', sans-serif;
+  --FB:     'Barlow', sans-serif;
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
+  --safe-top:    env(safe-area-inset-top, 0px);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+html, body { height:100%; overflow-x:hidden; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--FB);
+  padding-top: var(--safe-top);
+  padding-bottom: calc(var(--safe-bottom) + 20px);
+}
+
+/* ── HEADER ─────────────────────────────────── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 12px;
+}
+.header-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.header h1 {
+  font-family: var(--F);
+  font-size: 38px;
+  letter-spacing: 3px;
+  line-height: 1;
+  color: var(--white);
+}
+.header h1 span { color: var(--orange); }
+.header-right { text-align: right; }
+.current-time {
+  font-family: var(--F);
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: var(--orange);
+  line-height: 1;
+}
+.current-date {
+  font-family: var(--FU);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.day-tag {
+  display: inline-block;
+  margin-top: 4px;
+  font-family: var(--FU);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--orange);
+  padding: 2px 8px;
+}
+
+/* ── PROGRESS BAR ──────────────────────────── */
+.day-progress {
+  height: 2px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.day-progress-fill {
+  height: 100%;
+  background: var(--orange);
+  transition: width 1s linear;
+}
+
+/* ── TIMELINE ───────────────────────────────── */
+.timeline {
+  padding: 24px 20px 10px;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 52px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+}
+
+/* ── BLOCK ──────────────────────────────────── */
+.block {
+  display: flex;
+  gap: 0;
+  margin-bottom: 8px;
+  position: relative;
+  animation: fadeUp 0.4s ease both;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(12px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.block:nth-child(1)  { animation-delay: .04s }
+.block:nth-child(2)  { animation-delay: .07s }
+.block:nth-child(3)  { animation-delay: .10s }
+.block:nth-child(4)  { animation-delay: .13s }
+.block:nth-child(5)  { animation-delay: .16s }
+.block:nth-child(6)  { animation-delay: .19s }
+.block:nth-child(7)  { animation-delay: .22s }
+.block:nth-child(8)  { animation-delay: .25s }
+.block:nth-child(9)  { animation-delay: .28s }
+.block:nth-child(10) { animation-delay: .31s }
+.block:nth-child(11) { animation-delay: .34s }
+.block:nth-child(12) { animation-delay: .37s }
+.block:nth-child(13) { animation-delay: .40s }
+.block:nth-child(14) { animation-delay: .43s }
+.block:nth-child(15) { animation-delay: .46s }
+.block:nth-child(16) { animation-delay: .49s }
+
+.time-col {
+  width: 52px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 12px;
+  padding-top: 14px;
+}
+.time-col .t {
+  font-family: var(--FU);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--muted);
+  line-height: 1;
+}
+.dot-col {
+  width: 20px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16px;
+}
+.dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--grey);
+  background: var(--black);
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.block.current .dot {
+  border-color: var(--orange);
+  background: var(--orange);
+  box-shadow: 0 0 12px rgba(255,85,0,0.6);
+}
+.block.past .dot {
+  border-color: var(--green);
+  background: var(--green);
+}
+
+.card-col {
+  flex: 1;
+  padding-left: 12px;
+  padding-bottom: 8px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 12px 14px;
+  transition: border-color 0.2s;
+}
+.block.current .card {
+  border-color: var(--orange);
+  background: rgba(255,85,0,0.05);
+}
+.block.past .card { opacity: 0.5; }
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.card-icon { font-size: 18px; line-height: 1; flex-shrink: 0; }
+.card-label {
+  font-family: var(--FU);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.block.current .card-label { color: var(--orange); }
+
+.card-desc {
+  font-family: var(--FB);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+  padding-left: 26px;
+}
+
+/* ── CURRENT NOW BADGE ─────────────────────── */
+.now-badge {
+  font-family: var(--FU);
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--orange);
+  padding: 2px 6px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── LINK BLOCKS (GYM / CORE) ───────────────── */
+.block.link-block .card {
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+.block.link-block .card:active {
+  transform: scale(0.98);
+  border-color: var(--orange);
+}
+
+/* GYM — big block */
+.gym-card {
+  background: linear-gradient(135deg, #1a0800, #0f0a00) !important;
+  border-color: var(--orange) !important;
+  padding: 20px 16px !important;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+}
+.gym-card::before {
+  content: 'GYM';
+  position: absolute;
+  right: -10px; top: -10px;
+  font-family: var(--F);
+  font-size: 80px;
+  color: rgba(255,85,0,0.07);
+  pointer-events: none;
+  line-height: 1;
+  letter-spacing: 4px;
+}
+.gym-card:active { transform: scale(0.98); }
+.gym-big-label {
+  font-family: var(--F);
+  font-size: 36px;
+  letter-spacing: 4px;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.gym-focus {
+  font-family: var(--FU);
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--hot);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.gym-meta {
+  font-family: var(--FU);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.gym-cta {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--FU);
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--orange);
+  padding: 10px 18px;
+}
+.gym-cta-arrow { font-size: 14px; }
+
+/* CORE — medium block */
+.core-card {
+  background: linear-gradient(135deg, #090f0a, #0a0d12) !important;
+  border-color: #1a4a2a !important;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+}
+.core-card::before {
+  content: 'CORE';
+  position: absolute;
+  right: -5px; top: -8px;
+  font-family: var(--F);
+  font-size: 50px;
+  color: rgba(0,255,136,0.05);
+  pointer-events: none;
+  line-height: 1;
+}
+.core-card:active { transform: scale(0.98); }
+.core-card .card-label { color: var(--green) !important; }
+.core-cta {
+  margin-top: 8px;
+  font-family: var(--FU);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--green);
+  text-transform: uppercase;
+  padding-left: 26px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── REPEAT BADGE ──────────────────────────── */
+.repeat-badge {
+  font-family: var(--FU);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  border: 1px solid var(--grey);
+  padding: 2px 6px;
+  margin-left: 6px;
+  text-transform: uppercase;
+}
+
+/* ── FOOTER MOTTO ───────────────────────────── */
+.motto {
+  text-align: center;
+  padding: 30px 20px 10px;
+  font-family: var(--F);
+  font-size: 28px;
+  letter-spacing: 5px;
+  color: rgba(255,85,0,0.15);
+}
+
+/* ── SECTION LABEL ──────────────────────────── */
+.section-label {
+  font-family: var(--FU);
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--grey);
+  padding: 16px 20px 8px 72px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  margin-right: 20px;
+}
+
+/* ── PREMIUM PANELS / TRACKERS ───────────────── */
+.home-dashboard { padding: 18px 20px 0; display:grid; gap:10px; }
+.profile-card, .war-card, .tracker-card, .install-card {
+  background: linear-gradient(135deg, rgba(255,85,0,0.08), rgba(255,255,255,0.025));
+  border: 1px solid var(--border);
+  padding: 14px;
+  position: relative; overflow: hidden;
+}
+.profile-card::after, .install-card::after { content:''; position:absolute; inset:auto -40px -60px auto; width:120px; height:120px; border-radius:50%; background:rgba(255,85,0,0.08); filter:blur(10px); }
+.profile-row { display:flex; align-items:center; gap:12px; position:relative; z-index:1; }
+.avatar { width:46px; height:46px; border:1px solid rgba(255,85,0,.45); display:flex; align-items:center; justify-content:center; font-family:var(--F); font-size:26px; color:var(--orange); background:#100b08; }
+.greeting { font-family:var(--FU); font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+.greeting strong { color:var(--white); }
+.profile-edit { margin-left:auto; background:transparent; color:var(--orange); border:1px solid rgba(255,85,0,.35); padding:8px 10px; font-family:var(--FU); letter-spacing:2px; font-weight:700; }
+.war-grid { display:grid; grid-template-columns:1.2fr .8fr .8fr; gap:10px; }
+.war-card { text-align:center; }
+.war-value { font-family:var(--F); font-size:34px; letter-spacing:2px; color:var(--orange); line-height:1; }
+.war-label { font-family:var(--FU); font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-top:4px; }
+.tracker-card h3, .install-card h3 { font-family:var(--F); font-size:26px; letter-spacing:3px; color:var(--white); line-height:1; margin-bottom:8px; }
+.tracker-row { display:grid; grid-template-columns:1fr auto; gap:8px; }
+.tracker-row input { min-width:0; background:#0d0d0d; border:1px solid var(--border); color:var(--white); padding:13px 12px; font-family:var(--FU); font-size:18px; letter-spacing:1px; outline:none; }
+.tracker-row input:focus { border-color:var(--orange); }
+.tracker-row button, .install-btn, .spotify-btn, .cardio-btn { background:var(--orange); color:var(--black); border:0; padding:12px 14px; font-family:var(--FU); font-weight:900; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.weight-mini { margin-top:8px; font-family:var(--FU); font-size:11px; letter-spacing:1px; color:var(--muted); text-transform:uppercase; }
+.cardio-panel { margin-top:10px; padding-left:26px; display:grid; gap:8px; }
+.cardio-time { font-family:var(--F); font-size:42px; color:var(--orange); letter-spacing:3px; line-height:1; }
+.cardio-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.cardio-btn.ghost, .install-btn.ghost { background:transparent; color:var(--orange); border:1px solid rgba(255,85,0,.35); }
+.spotify-btn { display:inline-flex; margin-top:10px; text-decoration:none; align-items:center; gap:8px; }
+.install-card { margin: 22px 20px 0; border-color:rgba(255,85,0,.45); }
+.install-copy { font-family:var(--FB); color:var(--muted); font-size:13px; line-height:1.45; margin-bottom:12px; position:relative; z-index:1; }
+.install-steps { display:none; margin-top:10px; font-family:var(--FU); font-size:12px; letter-spacing:1px; color:var(--muted); line-height:1.6; text-transform:uppercase; }
+.install-steps.show { display:block; }
+.page-fade { animation: pageFade .35s ease both; }
+@keyframes pageFade { from { opacity:.15; transform:translateY(8px);} to { opacity:1; transform:none;} }
+@media (max-width:420px){ .war-grid{grid-template-columns:1fr 1fr;} .war-card:first-child{grid-column:span 2;} }
+
+</style>
+</head>
+<body class="page-fade">
+
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>MODO<span>.</span>GUERRA</h1>
+      <div class="day-tag" id="dayTag">—</div>
+    </div>
+    <div class="header-right">
+      <div class="current-time" id="clockDisplay">--:--</div>
+      <div class="current-date" id="dateDisplay">—</div>
+    </div>
+  </div>
+</div>
+<div class="day-progress">
+  <div class="day-progress-fill" id="dayProgress" style="width:0%"></div>
+</div>
+
+<div class="home-dashboard">
+  <div class="profile-card">
+    <div class="profile-row">
+      <div class="avatar" id="profileAvatar">M</div>
+      <div>
+        <div class="greeting">Buenas, <strong id="profileName">Marcos</strong>.</div>
+        <div class="greeting" id="profileSub">Día de guerra cargando...</div>
+      </div>
+      <button class="profile-edit" onclick="editProfile()">EDITAR</button>
+    </div>
+  </div>
+  <div class="war-grid">
+    <div class="war-card"><div class="war-value" id="warDay">DÍA —/60</div><div class="war-label">Modo Guerra</div></div>
+    <div class="war-card"><div class="war-value" id="streakDays">0</div><div class="war-label">Racha</div></div>
+    <div class="war-card"><div class="war-value" id="lastWeight">—</div><div class="war-label">Peso</div></div>
+  </div>
+  <div class="tracker-card">
+    <h3>PESO CORPORAL</h3>
+    <div class="tracker-row">
+      <input id="bodyWeightInput" inputmode="decimal" placeholder="Ej: 83.0 kg">
+      <button onclick="saveBodyWeight()">GUARDAR</button>
+    </div>
+    <div class="weight-mini" id="weightTrend">Sin registros todavía. Hoy toca domar la báscula, no pelearte con ella.</div>
+  </div>
+</div>
+
+
+<div class="timeline" id="timeline"></div>
+<div class="install-card" id="installCard">
+  <h3>INSTALAR COMO APP</h3>
+  <div class="install-copy">Abre Modo Guerra como una app real: sin barra del navegador, con icono propio y acceso directo. Limpio, serio y sin postureo barato.</div>
+  <button class="install-btn" id="installBtn" onclick="installPWA()">INSTALAR APP</button>
+  <button class="install-btn ghost" onclick="toggleInstallHelp()">¿IPHONE?</button>
+  <div class="install-steps" id="installSteps">iPhone: Safari → Compartir → Añadir a pantalla de inicio. Android/Chrome: pulsa Instalar app cuando aparezca.</div>
+</div>
+<div class="motto">NO EXCUSES.</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   CONFIGURACIÓN DE LA RUTINA DIARIA
+   Edita los bloques aquí para personalizar
+   ══════════════════════════════════════════════ */
+
+const DAILY_SECTIONS = [
+  { label: 'MAÑANA' },
+  {
+    time: '05:45', icon: '⚡',
+    label: 'Levantarse',
+    desc: 'Sin snooze, sin drama. Empieza el día.',
+    type: 'action'
+  },
+  {
+    time: '06:00', icon: '💧',
+    label: 'Agua + Suplementos',
+    desc: 'Agua con electrolitos · Creatina 5 g · Café solo (opcional)',
+    type: 'supplement'
+  },
+  {
+    time: '06:00', timeEnd: '06:10', icon: '🧠',
+    label: 'Core + Postura',
+    desc: 'Vacuum · Plancha · Dead Bug · Glute Bridge · Flexor cadera',
+    type: 'core',
+    href: 'gym_core.html'
+  },
+  {
+    time: '06:30', icon: '💼',
+    label: 'Salir al trabajo',
+    desc: 'Empieza el ayuno intermitente',
+    type: 'action'
+  },
+  { label: 'TRABAJO' },
+  {
+    time: '07:00', timeEnd: '14:00', icon: '🚫',
+    label: 'Solo líquidos',
+    desc: 'Agua · Café solo · Infusiones. Sin calorías.',
+    type: 'info'
+  },
+  {
+    time: null, icon: '🦵',
+    label: 'Cada 45–60 min',
+    desc: 'Levántate 2 min · Camina · Rellena el agua',
+    type: 'repeat'
+  },
+  { label: 'MEDIODÍA' },
+  {
+    time: '14:00', timeEnd: '15:00', icon: '🍗',
+    label: 'Primera comida',
+    desc: 'Proteína + arroz / patata / boniato + verdura',
+    type: 'food'
+  },
+  {
+    time: '14:00', icon: '💊',
+    label: 'Suplementos comida',
+    desc: 'Omega 3 · Multivitamínico',
+    type: 'supplement'
+  },
+  {
+    time: '15:00', icon: '🚶',
+    label: 'Caminar 10 min',
+    desc: 'Muy recomendable. Mejora glucosa y digestión.',
+    type: 'action'
+  },
+  { label: 'TARDE / GYM' },
+  {
+    time: '16:30', icon: '⚡',
+    label: 'Pre gym',
+    desc: 'Beta alanina · Opcional: plátano o yogur proteico',
+    type: 'supplement'
+  },
+  {
+    time: '16:40', timeEnd: '18:10', icon: '🏋️',
+    label: 'GYM — Entreno fuerte',
+    desc: 'Hipertrofia + definición · Modo guerra',
+    type: 'gym',
+    href: 'gym_beast.html'
+  },
+  {
+    time: '18:10', timeEnd: '18:40', icon: '🚴',
+    label: 'Cardio post gym',
+    desc: 'Caminata inclinada · Bici suave · Elíptica — 20–30 min',
+    type: 'cardio'
+  },
+  {
+    time: '18:40', icon: '🥤',
+    label: 'Post gym',
+    desc: 'Batido de proteína si hace falta',
+    type: 'supplement'
+  },
+  { label: 'NOCHE' },
+  {
+    time: '21:00', icon: '🍳',
+    label: 'Cena',
+    desc: 'Ligera + alta en proteína. Sin hidratos nocturnos.',
+    type: 'food'
+  },
+  {
+    time: '22:00', icon: '🌙',
+    label: 'Antes de dormir',
+    desc: 'ZMA o magnesio',
+    type: 'supplement'
+  },
+  {
+    time: '23:00', icon: '😴',
+    label: 'Dormir',
+    desc: 'Esto no se negocia. 7–8 h mínimo.',
+    type: 'sleep'
+  }
+];
+
+/* ══════════════════════════════════════════════
+   FIN CONFIGURACIÓN
+   ══════════════════════════════════════════════ */
+
+// Day names
+const DAYS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const DAYS_SHORT = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+const MUSCLES = {
+  1: 'ESPALDA + BÍCEPS',
+  2: 'PECHO + HOMBRO + TRÍCEPS',
+  3: 'PIERNA + ABDOMEN',
+  4: 'ESPALDA + BÍCEPS (VAR.)',
+  5: 'PECHO + HOMBRO + TRÍCEPS',
+  6: 'PIERNA LIGERA + MOVILIDAD',
+  0: 'DESCANSO ACTIVO'
+};
+
+function getMinutes(timeStr) {
+  if (!timeStr) return null;
+  const [h, m] = timeStr.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function render() {
+  const now = new Date();
+  const nowMin = now.getHours() * 60 + now.getMinutes();
+  const dayIdx = now.getDay();
+  const dayProgressPct = Math.min(100, Math.round((nowMin / (24*60)) * 100));
+
+  // Clock
+  document.getElementById('clockDisplay').textContent =
+    now.getHours().toString().padStart(2,'0') + ':' +
+    now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('dateDisplay').textContent =
+    DAYS[dayIdx] + ' · ' +
+    now.getDate().toString().padStart(2,'0') + '/' +
+    (now.getMonth()+1).toString().padStart(2,'0');
+  document.getElementById('dayTag').textContent = DAYS_SHORT[dayIdx];
+  document.getElementById('dayProgress').style.width = dayProgressPct + '%';
+
+  const timeline = document.getElementById('timeline');
+  timeline.innerHTML = '';
+
+  DAILY_SECTIONS.forEach((item, i) => {
+    // Section label
+    if (item.label && !item.time && !item.icon) {
+      const sec = document.createElement('div');
+      sec.className = 'section-label';
+      sec.textContent = item.label;
+      timeline.appendChild(sec);
+      return;
+    }
+
+    const startMin = getMinutes(item.time);
+    const endMin   = getMinutes(item.timeEnd);
+
+    let status = 'future';
+    if (startMin !== null) {
+      if (endMin !== null) {
+        if (nowMin >= startMin && nowMin < endMin) status = 'current';
+        else if (nowMin >= endMin) status = 'past';
+      } else {
+        const nextStart = findNextTime(i + 1);
+        if (nowMin >= startMin && (nextStart === null || nowMin < nextStart)) status = 'current';
+        else if (nowMin >= startMin) status = 'past';
+      }
+    }
+
+    const block = document.createElement('div');
+    block.className = 'block' + (status === 'current' ? ' current' : '') + (status === 'past' ? ' past' : '');
+
+    // Time col
+    const timeCol = document.createElement('div');
+    timeCol.className = 'time-col';
+    if (item.time) {
+      const t = document.createElement('div');
+      t.className = 't';
+      t.textContent = item.time;
+      timeCol.appendChild(t);
+    }
+
+    // Dot col
+    const dotCol = document.createElement('div');
+    dotCol.className = 'dot-col';
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dotCol.appendChild(dot);
+
+    // Card col
+    const cardCol = document.createElement('div');
+    cardCol.className = 'card-col';
+
+    if (item.type === 'gym') {
+      block.classList.add('link-block');
+      const a = document.createElement('a');
+      a.href = item.href;
+      a.className = 'gym-card';
+      a.innerHTML = `
+        <div class="gym-big-label">🏋️ GYM</div>
+        <div class="gym-focus" id="todayFocus">CARGANDO RUTINA...</div>
+        <div class="gym-meta">16:40 – 18:10 · Entreno fuerte · Modo guerra</div>
+        <div class="gym-cta">
+          <span>ABRIR RUTINA</span>
+          <span class="gym-cta-arrow">→</span>
+        </div>
+        <button class="spotify-btn" type="button" onclick="event.preventDefault(); event.stopPropagation(); window.open('https://open.spotify.com/','_blank')">🎧 PLAYLIST</button>
+      `;
+      setTimeout(() => {
+        const f = document.getElementById('todayFocus');
+        if (f) f.textContent = MUSCLES[now.getDay()] || 'DESCANSO ACTIVO';
+      }, 50);
+      cardCol.appendChild(a);
+
+    } else if (item.type === 'core') {
+      block.classList.add('link-block');
+      const a = document.createElement('a');
+      a.href = item.href;
+      a.className = 'card core-card';
+      a.innerHTML = `
+        <div class="card-top">
+          <span class="card-icon">${item.icon}</span>
+          <span class="card-label">${item.label}</span>
+          ${status === 'current' ? '<span class="now-badge">AHORA</span>' : ''}
+        </div>
+        <div class="card-desc">${item.desc}</div>
+        <div class="core-cta">Ver ejercicios <span>→</span></div>
+      `;
+      cardCol.appendChild(a);
+
+    } else if (item.type === 'cardio') {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-top">
+          <span class="card-icon">${item.icon}</span>
+          <span class="card-label">${item.label}</span>
+          ${status === 'current' ? '<span class="now-badge">AHORA</span>' : ''}
+        </div>
+        <div class="card-desc">${item.desc}</div>
+        <div class="cardio-panel">
+          <div class="cardio-time" id="cardioDisplay">20:00</div>
+          <div class="cardio-actions">
+            <button class="cardio-btn" onclick="startCardio(20)">20 MIN</button>
+            <button class="cardio-btn" onclick="startCardio(30)">30 MIN</button>
+            <button class="cardio-btn ghost" onclick="pauseCardio()">PAUSA</button>
+            <button class="cardio-btn ghost" onclick="resetCardio()">RESET</button>
+          </div>
+        </div>
+      `;
+      cardCol.appendChild(card);
+
+    } else {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const isRepeat = item.type === 'repeat';
+      card.innerHTML = `
+        <div class="card-top">
+          <span class="card-icon">${item.icon}</span>
+          <span class="card-label">${item.label}${isRepeat ? '<span class="repeat-badge">REPETIR</span>' : ''}</span>
+          ${status === 'current' ? '<span class="now-badge">AHORA</span>' : ''}
+        </div>
+        <div class="card-desc">${item.desc}</div>
+      `;
+      cardCol.appendChild(card);
+    }
+
+    block.appendChild(timeCol);
+    block.appendChild(dotCol);
+    block.appendChild(cardCol);
+    timeline.appendChild(block);
+  });
+
+  // Auto-scroll to current block
+  setTimeout(() => {
+    const currentBlock = timeline.querySelector('.block.current');
+    if (currentBlock) {
+      currentBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 400);
+}
+
+function findNextTime(fromIdx) {
+  for (let i = fromIdx; i < DAILY_SECTIONS.length; i++) {
+    const m = getMinutes(DAILY_SECTIONS[i].time);
+    if (m !== null) return m;
+  }
+  return null;
+}
+
+
+const WAR_START_KEY = 'mg_war_start';
+const PROFILE_KEY = 'mg_profile_name';
+let deferredInstallPrompt = null;
+let cardioTimer = null;
+let cardioLeft = Number(localStorage.getItem('mg_cardio_left') || 20*60);
+let cardioRunning = false;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const btn = document.getElementById('installBtn');
+  if (btn) btn.textContent = 'INSTALAR APP';
+});
+
+function todayKey(){ return new Date().toISOString().slice(0,10); }
+function getWarStart(){
+  let start = localStorage.getItem(WAR_START_KEY);
+  if (!start) { start = todayKey(); localStorage.setItem(WAR_START_KEY, start); }
+  return start;
+}
+function daysBetween(a,b){ return Math.floor((new Date(b+'T00:00:00') - new Date(a+'T00:00:00')) / 86400000); }
+function updateDashboard(){
+  const name = localStorage.getItem(PROFILE_KEY) || 'Marcos';
+  const start = getWarStart();
+  const warDay = Math.min(60, Math.max(1, daysBetween(start, todayKey()) + 1));
+  const weights = JSON.parse(localStorage.getItem('mg_body_weights') || '[]');
+  const last = weights[weights.length-1];
+  const streak = getTrainingStreak();
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('profileAvatar').textContent = (name[0] || 'M').toUpperCase();
+  document.getElementById('profileSub').textContent = `${MUSCLES[new Date().getDay()] || 'DESCANSO ACTIVO'} · Día ${warDay} de 60`;
+  document.getElementById('warDay').textContent = `DÍA ${warDay}/60`;
+  document.getElementById('streakDays').textContent = streak;
+  document.getElementById('lastWeight').textContent = last ? `${last.weight}kg` : '—';
+  const trend = document.getElementById('weightTrend');
+  if (weights.length >= 2) {
+    const diff = (last.weight - weights[weights.length-2].weight).toFixed(1);
+    trend.textContent = `Último cambio: ${diff > 0 ? '+' : ''}${diff} kg respecto al registro anterior.`;
+  } else if (last) trend.textContent = `Último registro: ${last.weight} kg · ${last.date}.`;
+}
+function editProfile(){
+  const current = localStorage.getItem(PROFILE_KEY) || 'Marcos';
+  const next = prompt('Nombre para la home:', current);
+  if (next && next.trim()) { localStorage.setItem(PROFILE_KEY, next.trim()); updateDashboard(); }
+}
+function saveBodyWeight(){
+  const input = document.getElementById('bodyWeightInput');
+  const val = parseFloat((input.value || '').replace(',', '.'));
+  if (!val || val < 30 || val > 250) { alert('Pon un peso válido, máquina.'); return; }
+  const weights = JSON.parse(localStorage.getItem('mg_body_weights') || '[]').filter(x => x.date !== todayKey());
+  weights.push({ date: todayKey(), weight: Number(val.toFixed(1)) });
+  localStorage.setItem('mg_body_weights', JSON.stringify(weights));
+  input.value = '';
+  updateDashboard();
+}
+function getTrainingStreak(){
+  const days = JSON.parse(localStorage.getItem('mg_training_days') || '[]').sort().reverse();
+  let streak = 0;
+  let cursor = new Date(todayKey()+'T00:00:00');
+  for (;;) {
+    const key = cursor.toISOString().slice(0,10);
+    if (days.includes(key)) { streak++; cursor.setDate(cursor.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+function markTrainingDay(){
+  const days = JSON.parse(localStorage.getItem('mg_training_days') || '[]');
+  const t = todayKey();
+  if (!days.includes(t)) { days.push(t); localStorage.setItem('mg_training_days', JSON.stringify(days)); }
+  updateDashboard();
+}
+function renderCardioDisplay(){
+  const el = document.getElementById('cardioDisplay');
+  if (!el) return;
+  const m = Math.floor(cardioLeft/60).toString().padStart(2,'0');
+  const s = (cardioLeft%60).toString().padStart(2,'0');
+  el.textContent = `${m}:${s}`;
+}
+function startCardio(minutes){
+  clearInterval(cardioTimer);
+  cardioLeft = minutes*60;
+  cardioRunning = true;
+  renderCardioDisplay();
+  cardioTimer = setInterval(() => {
+    cardioLeft = Math.max(0, cardioLeft-1);
+    localStorage.setItem('mg_cardio_left', cardioLeft);
+    renderCardioDisplay();
+    if (cardioLeft <= 0) { pauseCardio(); alert('Cardio completado. Buen trabajo.'); markTrainingDay(); }
+  }, 1000);
+}
+function pauseCardio(){ cardioRunning = false; clearInterval(cardioTimer); }
+function resetCardio(){ pauseCardio(); cardioLeft = 20*60; localStorage.setItem('mg_cardio_left', cardioLeft); renderCardioDisplay(); }
+function installPWA(){
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt = null;
+  } else {
+    toggleInstallHelp(true);
+  }
+}
+function toggleInstallHelp(force){
+  const steps = document.getElementById('installSteps');
+  if (steps) steps.classList.toggle('show', force === true ? true : undefined);
+}
+
+render();
+updateDashboard();
+renderCardioDisplay();
+// Update clock every 30 seconds
+setInterval(() => {
+  const now = new Date();
+  document.getElementById('clockDisplay').textContent =
+    now.getHours().toString().padStart(2,'0') + ':' +
+    now.getMinutes().toString().padStart(2,'0');
+  const dayProgressPct = Math.min(100, Math.round(((now.getHours()*60+now.getMinutes()) / (24*60)) * 100));
+  document.getElementById('dayProgress').style.width = dayProgressPct + '%';
+  updateDashboard();
+  renderCardioDisplay();
+}, 30000);
+
+function registerServiceWorkerMG(){
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(() => {});
+    });
+  }
+}
+registerServiceWorkerMG();
+</script>
+</body>
+</html>
