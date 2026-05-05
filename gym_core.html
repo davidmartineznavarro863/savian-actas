@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#090f0a">
+<title>CORE + POSTURA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:  #090f0a;
+  --dark:   #0d1410;
+  --card:   #111812;
+  --border: #1a2a1c;
+  --green:  #00FF88;
+  --green2: #00cc6a;
+  --orange: #FF5500;
+  --white:  #E8F0EA;
+  --grey:   #2a3a2c;
+  --muted:  #668066;
+  --F:  'Bebas Neue', sans-serif;
+  --FU: 'Barlow Condensed', sans-serif;
+  --FB: 'Barlow', sans-serif;
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
+  --safe-top:    env(safe-area-inset-top, 0px);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; overflow-x:hidden; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--FB);
+  padding-top: var(--safe-top);
+  padding-bottom: calc(var(--safe-bottom) + 30px);
+}
+
+/* ── TOP BAR ─────────────────────────────── */
+.topbar {
+  position: sticky; top:0; z-index:200;
+  background: rgba(9,15,10,0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.back-btn {
+  display: flex; align-items: center; justify-content: center;
+  width:36px; height:36px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-size: 18px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.back-btn:active { border-color: var(--green); }
+.topbar-center { flex: 1; }
+.topbar-title {
+  font-family: var(--F);
+  font-size: 22px; letter-spacing: 3px;
+  color: var(--white); line-height: 1;
+}
+.topbar-sub {
+  font-family: var(--FU);
+  font-size: 10px; letter-spacing: 2px;
+  color: var(--muted); text-transform: uppercase; margin-top: 1px;
+}
+.topbar-pct {
+  font-family: var(--F);
+  font-size: 28px; letter-spacing: 2px;
+  color: var(--green); line-height: 1; flex-shrink: 0;
+}
+
+.progress-bar { height: 3px; background: var(--border); }
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--green2));
+  transition: width 0.4s ease;
+}
+
+/* ── HEADER ─────────────────────────────── */
+.hero {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: 'CORE';
+  position: absolute; right: -10px; top: -10px;
+  font-family: var(--F);
+  font-size: 90px; letter-spacing: 4px;
+  color: rgba(0,255,136,0.04);
+  pointer-events: none; line-height: 1;
+}
+.hero-title {
+  font-family: var(--F);
+  font-size: 42px; letter-spacing: 4px;
+  color: var(--white); line-height: 0.95;
+}
+.hero-title span { color: var(--green); }
+.hero-subtitle {
+  font-family: var(--FU);
+  font-size: 11px; letter-spacing: 4px;
+  color: var(--muted); text-transform: uppercase;
+  margin-top: 4px;
+}
+.hero-duration {
+  margin-top: 12px;
+  display: flex; gap: 16px; align-items: center;
+}
+.hero-pill {
+  font-family: var(--FU);
+  font-size: 11px; letter-spacing: 2px;
+  color: var(--green);
+  border: 1px solid rgba(0,255,136,0.3);
+  padding: 4px 10px;
+  text-transform: uppercase;
+}
+
+/* ── EXERCISE CARDS ─────────────────────── */
+.exercises { padding: 12px 12px 0; display: flex; flex-direction: column; gap: 10px; }
+
+.ex-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: border-color 0.3s;
+  animation: slideUp 0.35s ease both;
+}
+@keyframes slideUp {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.ex-card.active-card { border-color: var(--green); background: rgba(0,255,136,0.03); }
+.ex-card.done-card   { opacity: 0.45; border-color: #0f1f10; }
+
+.ex-card-top {
+  display: flex; min-height: 86px;
+}
+.ex-img {
+  width: 76px; flex-shrink: 0;
+  background: var(--dark);
+  overflow: hidden; position: relative;
+}
+.ex-img img {
+  width:100%; height:100%;
+  object-fit: cover; display: block;
+  filter: grayscale(20%) contrast(1.1) brightness(0.8);
+}
+.ex-icon-fb {
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  font-size: 34px;
+}
+.ex-info {
+  flex: 1; padding: 12px 12px 8px;
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 0;
+}
+.ex-name {
+  font-family: var(--FU);
+  font-weight: 700; font-size: 17px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+  line-height: 1.15; color: var(--white);
+}
+.ex-muscle {
+  font-family: var(--FU); font-size: 10px;
+  letter-spacing: 2px; color: var(--green);
+  text-transform: uppercase; font-weight: 600;
+}
+.ex-reps {
+  font-family: var(--FU); font-size: 12px;
+  letter-spacing: 1px; color: var(--muted);
+}
+.ex-reps strong { color: var(--white); }
+.ex-note {
+  font-family: var(--FB); font-size: 11px;
+  color: var(--muted); line-height: 1.3;
+  font-style: italic; margin-top: 2px;
+}
+.done-check {
+  font-family: var(--FU); font-size: 9px;
+  letter-spacing: 2px; color: var(--green);
+  border: 1px solid var(--green); padding: 2px 6px;
+  align-self: flex-start; margin-top: 2px;
+}
+
+/* ── BOTTOM BAR ─────────────────────────── */
+.ex-bottom {
+  border-top: 1px solid var(--border);
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sets-row { display: flex; gap: 6px; flex: 1; align-items: center; flex-wrap: wrap; }
+
+.set-dot {
+  width: 44px; height: 44px;
+  border: 2px solid var(--grey);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--FU); font-weight: 700; font-size: 15px;
+  color: var(--muted); cursor: pointer;
+  transition: all 0.18s; flex-shrink: 0;
+  user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.set-dot:active { transform: scale(0.88); }
+.set-dot.done-set { border-color: var(--green); color: var(--green); background: rgba(0,255,136,0.1); }
+.set-dot.last-dot  { border-color: #00aa55; color: #00aa55; animation: gPulse 1.4s ease-in-out infinite; }
+@keyframes gPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(0,255,136,0.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(0,255,136,0); }
+}
+
+/* ── TIMER BUTTON ─────────────────────────── */
+.timer-btn {
+  height: 44px; padding: 0 12px;
+  border: 2px solid var(--border); background: transparent;
+  color: var(--muted);
+  font-family: var(--FU); font-weight: 700;
+  font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; gap: 5px;
+  transition: all 0.18s; -webkit-tap-highlight-color: transparent;
+}
+.timer-btn.is-timed {
+  border-color: var(--green); color: var(--green);
+  background: rgba(0,255,136,0.05);
+}
+.timer-btn:active { transform: scale(0.95); }
+
+/* ── HOLD TIMER SHEET (for timed exercises) ─ */
+.hold-sheet {
+  position: fixed; bottom:0; left:0; right:0;
+  background: var(--dark);
+  border-top: 2px solid var(--green);
+  padding: 28px 24px;
+  padding-bottom: calc(var(--safe-bottom) + 24px);
+  z-index: 400;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  text-align: center;
+}
+.hold-sheet.show { transform: translateY(0); }
+.hold-label {
+  font-family: var(--FU); font-size: 11px;
+  letter-spacing: 4px; color: var(--green);
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.hold-exname {
+  font-family: var(--FU); font-size: 13px;
+  letter-spacing: 2px; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.hold-ring {
+  width: 140px; height: 140px;
+  position: relative; margin: 0 auto 12px;
+}
+.hold-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.ring-track { fill:none; stroke:var(--border); stroke-width:5; }
+.ring-fill  { fill:none; stroke:var(--green); stroke-width:5; stroke-linecap:round; transition: stroke-dashoffset 0.1s linear; }
+.ring-inner {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.ring-time {
+  font-family: var(--F); font-size: 44px;
+  letter-spacing: 2px; color: var(--green); line-height: 1;
+}
+.ring-status {
+  font-family: var(--FU); font-size: 9px;
+  letter-spacing: 3px; color: var(--muted);
+  text-transform: uppercase; margin-top: 2px;
+}
+.hold-hint {
+  font-family: var(--FU); font-size: 11px;
+  letter-spacing: 2px; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 18px;
+}
+.hold-btns { display: grid; grid-template-columns:1fr 1fr; gap: 10px; }
+.h-btn {
+  font-family: var(--FU); font-weight:700;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 14px; border: none; cursor: pointer; transition: all 0.15s;
+}
+.h-btn:active { transform: scale(0.97); }
+.h-btn-cancel { background: var(--grey); color: var(--white); }
+.h-btn-done   {
+  background: var(--green); color: var(--black);
+  grid-column: span 2; font-size: 14px; letter-spacing: 3px;
+}
+
+/* ── DONE BANNER ──────────────────────────── */
+.done-banner {
+  display: none; margin: 12px 12px 0;
+  background: linear-gradient(135deg, #001a0d, #002a14);
+  border: 1px solid var(--green);
+  padding: 14px 16px;
+  align-items: center; gap: 12px;
+}
+.done-banner.show { display: flex; }
+.done-banner h3 { font-family: var(--F); font-size: 24px; letter-spacing:3px; color: var(--green); }
+.done-banner p  { font-family: var(--FU); font-size: 11px; letter-spacing:2px; color: var(--muted); text-transform: uppercase; }
+
+/* ── INFO BOX ─────────────────────────────── */
+.info-box {
+  margin: 16px 12px 0;
+  background: var(--card); border: 1px solid var(--border); padding: 14px 16px;
+}
+.info-title {
+  font-family: var(--FU); font-size: 10px;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px;
+  display: flex; align-items: center; gap:8px;
+}
+.info-title::after { content:''; flex:1; height:1px; background:var(--border); }
+.info-item {
+  display: flex; gap: 10px; margin-bottom: 6px;
+  font-family: var(--FU); font-size: 13px;
+  letter-spacing: 0.5px; color: var(--muted); line-height:1.4;
+}
+.info-item span:first-child { color: var(--green); flex-shrink:0; }
+.info-item:last-child { margin-bottom:0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="gym_home.html" class="back-btn">←</a>
+  <div class="topbar-center">
+    <div class="topbar-title">CORE + POSTURA</div>
+    <div class="topbar-sub">06:00 — 06:10 · Mañana</div>
+  </div>
+  <div class="topbar-pct" id="pctDisplay">0%</div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+<div class="hero">
+  <div class="hero-title">CORE<br><span>+</span> POSTURA</div>
+  <div class="hero-subtitle">Rutina matutina · Modo Guerra 60 días</div>
+  <div class="hero-duration">
+    <div class="hero-pill">⏱ 10 MIN</div>
+    <div class="hero-pill">🌅 Cada mañana</div>
+  </div>
+</div>
+
+<div class="done-banner" id="doneBanner">
+  <span style="font-size:28px;flex-shrink:0">✅</span>
+  <div>
+    <h3>MAÑANA LISTA</h3>
+    <p>¡Empiezas el día como un campeón!</p>
+  </div>
+</div>
+
+<div class="exercises" id="exList"></div>
+
+<div class="info-box">
+  <div class="info-title">Para qué sirve</div>
+  <div class="info-item"><span>🎯</span><span>Activa el core profundo antes de empezar el día</span></div>
+  <div class="info-item"><span>🧍</span><span>Mejora postura y evita el encorvamiento por estar sentado</span></div>
+  <div class="info-item"><span>🔥</span><span>Activa glúteos — fundamentales para tu físico visual</span></div>
+  <div class="info-item"><span>🦾</span><span>Previene lesiones de espalda y cadera a largo plazo</span></div>
+  <div class="info-item"><span>⏱</span><span>10 minutos. Sin excusas. Hazlo antes de desayunar.</span></div>
+</div>
+
+<!-- HOLD SHEET -->
+<div class="hold-sheet" id="holdSheet">
+  <div class="hold-label" id="holdLabel">Manteniendo</div>
+  <div class="hold-exname" id="holdExName">—</div>
+  <div class="hold-ring">
+    <svg viewBox="0 0 140 140">
+      <circle class="ring-track" cx="70" cy="70" r="62"/>
+      <circle class="ring-fill" id="ringFill" cx="70" cy="70" r="62"
+        stroke-dasharray="389.6" stroke-dashoffset="0"/>
+    </svg>
+    <div class="ring-inner">
+      <div class="ring-time" id="holdTime">0:30</div>
+      <div class="ring-status" id="holdStatus">seg restantes</div>
+    </div>
+  </div>
+  <div class="hold-hint" id="holdHint">Respira profundo · Aguanta</div>
+  <div class="hold-btns">
+    <button class="h-btn h-btn-cancel" onclick="cancelHold()">Cancelar</button>
+    <button class="h-btn h-btn-done" id="holdDoneBtn" onclick="holdDone()">✓ COMPLETADO</button>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   CONFIGURA TU RUTINA DE CORE AQUÍ
+   ─────────────────────────────────────────────
+   type: "reps"  → series de repeticiones
+         "hold"  → mantener posición X segundos
+         "both"  → sets con cronómetro de hold
+   holdTime: segundos a mantener (si type=hold/both)
+   ══════════════════════════════════════════════ */
+
+const CORE_ROUTINE = [
+  {
+    name: "Vacuum Abdominal",
+    muscle: "Core Profundo / Transverso",
+    type: "hold",
+    sets: 5,
+    reps: "×",          // se usa para mostrar
+    holdTime: 10,       // segundos de hold por rep
+    repsPerSet: 1,      // cuántas veces haces el hold por serie
+    icon: "🫁",
+    image: "",
+    note: "Exhala TODO el aire, mete el ombligo hacia la columna. Mantén 10 seg. Transverso del abdomen = el cinturón natural del cuerpo."
+  },
+  {
+    name: "Plancha Frontal",
+    muscle: "Core / Estabilización",
+    type: "hold",
+    sets: 3,
+    reps: "×",
+    holdTime: 45,
+    repsPerSet: 1,
+    icon: "🏗️",
+    image: "https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=300&q=80",
+    note: "Codos bajo los hombros, cuerpo recto como una tabla. Contrae glúteos y abdomen. Sin hundir ni elevar las caderas."
+  },
+  {
+    name: "Dead Bug",
+    muscle: "Core / Coordinación",
+    type: "reps",
+    sets: 3,
+    reps: "10",
+    holdTime: 0,
+    icon: "🐛",
+    image: "",
+    note: "Espalda baja pegada al suelo siempre. Baja brazo y pierna contrarios lentamente. Exhala en el movimiento."
+  },
+  {
+    name: "Glute Bridge",
+    muscle: "Glúteo Mayor / Core",
+    type: "reps",
+    sets: 3,
+    reps: "15",
+    holdTime: 0,
+    icon: "🍑",
+    image: "",
+    note: "Pies a la anchura de cadera. Sube apretando el glúteo, pausa 1 seg arriba. Pelvis neutra. Fundamental para postura y físico."
+  },
+  {
+    name: "Estiramiento Flexor Cadera",
+    muscle: "Psoas / Ilíaco",
+    type: "hold",
+    sets: 2,
+    reps: "×",
+    holdTime: 30,
+    repsPerSet: 1,
+    icon: "🧘",
+    image: "",
+    note: "Rodilla en el suelo, cadera adelantada. Mantén 30 seg cada lado. Contrarresta las horas de estar sentado."
+  }
+];
+
+/* ══════════════════════════════════════════════
+   FIN CONFIGURACIÓN
+   ══════════════════════════════════════════════ */
+
+const CIRC = 2 * Math.PI * 62; // r=62
+
+let setsDone = {};   // { exIdx: count }
+let holdInterval = null;
+let holdTotal = 30;
+let holdLeft  = 30;
+let holdExIdx = -1;
+let holdSetNum = 0;
+
+function init() {
+  loadState();
+  renderAll();
+}
+
+function loadState() {
+  try {
+    const today = new Date().toDateString();
+    if (localStorage.getItem('gym_core_date') !== today) {
+      setsDone = {};
+    } else {
+      setsDone = JSON.parse(localStorage.getItem('gym_core_sets') || '{}');
+    }
+  } catch(e) { setsDone = {}; }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('gym_core_date', new Date().toDateString());
+    localStorage.setItem('gym_core_sets', JSON.stringify(setsDone));
+  } catch(e) {}
+}
+
+function getSets(exIdx) { return setsDone[exIdx] || 0; }
+
+function renderAll() {
+  const totalSets = CORE_ROUTINE.reduce((a,ex) => a + ex.sets, 0);
+  const doneSets  = CORE_ROUTINE.reduce((a,ex,i) => a + Math.min(getSets(i), ex.sets), 0);
+  const pct = totalSets > 0 ? Math.round((doneSets/totalSets)*100) : 0;
+
+  document.getElementById('pctDisplay').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const allDone = CORE_ROUTINE.every((ex,i) => getSets(i) >= ex.sets);
+  document.getElementById('doneBanner').className = 'done-banner' + (allDone ? ' show' : '');
+
+  const list = document.getElementById('exList');
+  list.innerHTML = '';
+  CORE_ROUTINE.forEach((ex, i) => list.appendChild(buildCard(ex, i)));
+}
+
+function buildCard(ex, idx) {
+  const done    = getSets(idx);
+  const allDone = done >= ex.sets;
+  const isTimed = ex.type === 'hold' || ex.type === 'both';
+
+  const card = document.createElement('div');
+  card.className = 'ex-card' + (allDone ? ' done-card' : '') + (!allDone && done > 0 ? ' active-card' : '');
+  card.id = `card-${idx}`;
+  card.style.animationDelay = (idx * 0.05) + 's';
+
+  const imgHtml = ex.image
+    ? `<div class="ex-img"><img src="${ex.image}" alt="${ex.name}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=ex-icon-fb>${ex.icon}</div>'"><div style="position:absolute;inset:0;background:linear-gradient(to right,transparent,rgba(13,20,16,0.6))"></div></div>`
+    : `<div class="ex-img"><div class="ex-icon-fb">${ex.icon}</div></div>`;
+
+  const durationLabel = isTimed
+    ? `${ex.holdTime}s hold`
+    : `${ex.reps} reps`;
+
+  // Set dots
+  let dotsHtml = '';
+  for (let s = 1; s <= ex.sets; s++) {
+    const isDone = s <= done;
+    const isLast = !isDone && s === ex.sets && done === ex.sets - 1;
+    dotsHtml += `<div class="set-dot${isDone ? ' done-set' : ''}${isLast ? ' last-dot' : ''}"
+      onclick="markSet(${idx},${s})" title="Serie ${s}">${isDone ? '✓' : s}</div>`;
+  }
+
+  // Timer / action button
+  let btnHtml = '';
+  if (isTimed) {
+    btnHtml = `<button class="timer-btn is-timed" onclick="startHold(${idx},'${ex.name.replace(/'/g,"\\'")}',${ex.holdTime})">
+      ⏱ ${ex.holdTime}s
+    </button>`;
+  }
+
+  card.innerHTML = `
+    <div class="ex-card-top">
+      ${imgHtml}
+      <div class="ex-info">
+        <div class="ex-name">${ex.name}</div>
+        <div class="ex-muscle">${ex.muscle}</div>
+        <div class="ex-reps"><strong>${ex.sets} series × ${durationLabel}</strong></div>
+        ${ex.note ? `<div class="ex-note">${ex.note}</div>` : ''}
+        ${allDone ? '<div class="done-check">✓ COMPLETADO</div>' : ''}
+      </div>
+    </div>
+    <div class="ex-bottom">
+      <div class="sets-row">${dotsHtml}</div>
+      ${btnHtml}
+    </div>
+  `;
+  return card;
+}
+
+function markSet(exIdx, setNum) {
+  const ex = CORE_ROUTINE[exIdx];
+  const current = getSets(exIdx);
+  if (setNum !== current + 1) return;
+
+  setsDone[exIdx] = setNum;
+  saveState();
+  renderAll();
+
+  setTimeout(() => {
+    const card = document.getElementById(`card-${exIdx}`);
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+
+// ── Hold Timer ─────────────────────────────────
+function startHold(exIdx, name, seconds) {
+  clearInterval(holdInterval);
+  holdExIdx  = exIdx;
+  holdTotal  = seconds;
+  holdLeft   = seconds;
+
+  const ex = CORE_ROUTINE[exIdx];
+  const done = getSets(exIdx);
+
+  document.getElementById('holdExName').textContent = name;
+  document.getElementById('holdLabel').textContent =
+    ex.holdTime >= 30 ? 'Mantén la posición' : `Inhala · Mantén ${seconds}s · Exhala`;
+  document.getElementById('holdHint').textContent =
+    ex.holdTime >= 30 ? 'Respira · Aguanta · Tú puedes' : 'Vacía los pulmones · Core activado';
+  document.getElementById('holdDoneBtn').textContent = '✓  COMPLETADO';
+
+  document.getElementById('holdSheet').classList.add('show');
+  updateHoldUI();
+
+  holdInterval = setInterval(() => {
+    holdLeft -= 0.1;
+    if (holdLeft <= 0) {
+      holdLeft = 0;
+      updateHoldUI();
+      clearInterval(holdInterval);
+      document.getElementById('holdDoneBtn').textContent = '✓  ¡TIEMPO! MARCAR COMPLETADO';
+      document.getElementById('holdStatus').textContent = '¡COMPLETADO!';
+    } else {
+      updateHoldUI();
+    }
+  }, 100);
+}
+
+function updateHoldUI() {
+  const pct    = holdLeft / holdTotal;
+  const offset = CIRC * (1 - pct);
+  const s      = Math.ceil(holdLeft);
+  document.getElementById('holdTime').textContent = s;
+  document.getElementById('holdStatus').textContent = 'seg restantes';
+  document.getElementById('ringFill').style.strokeDashoffset = offset;
+}
+
+function holdDone() {
+  clearInterval(holdInterval);
+  document.getElementById('holdSheet').classList.remove('show');
+  if (holdExIdx >= 0) {
+    const current = getSets(holdExIdx);
+    const ex = CORE_ROUTINE[holdExIdx];
+    if (current < ex.sets) {
+      setsDone[holdExIdx] = current + 1;
+      saveState();
+      renderAll();
+    }
+  }
+  holdExIdx = -1;
+}
+
+function cancelHold() {
+  clearInterval(holdInterval);
+  document.getElementById('holdSheet').classList.remove('show');
+  holdExIdx = -1;
+}
+
+init();
+</script>
+</body>
+</html>
