@@ -69,10 +69,15 @@
           </div>
         </div>
         <div class="field">
-          <label>Localización Específica</label>
-          <input type="text" id="loc" placeholder="Coordenadas / lugar"
-            autocomplete="off" inputmode="decimal">
+          <label>Lugar / Referencia</label>
+          <input type="text" id="loc" placeholder="Dirección, lugar o coordenadas"
+            autocomplete="off" autocapitalize="words" spellcheck="false">
         </div>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>Nombre del firmante (cliente)</label>
+        <input type="text" id="firmante" placeholder="Nombre de quien firma el acta"
+          autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
       </div>
     </div>
   </div>
@@ -163,5 +168,15 @@
 
 </div>
 <script src="app.js"></script>
+
+<script>
+  // Registro del Service Worker — actualización automática sin borrar caché
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw_savian.js')
+        .catch(err => console.warn('Service Worker no registrado:', err));
+    });
+  }
+</script>
 </body>
 </html>
