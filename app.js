@@ -33,7 +33,7 @@ const clientData = {
       {name:"FINCA CAÑARETE",lat:null,lon:null},{name:"FINCA EL JALI",lat:null,lon:null},
       {name:"FINCA MATALENTISCO",lat:null,lon:null},{name:"FINCA NIJAR",lat:null,lon:null},
       {name:"FINCA PRIMICIAS",lat:null,lon:null},{name:"FINCA SANCHEZ RUANO",lat:null,lon:null},
-      {name:"Global",lat:null,lon:null},{name:"Huesca",lat:42.145989,lon:-0.345782},
+      {name:"BERJA",lat:null,lon:null},{name:"Huesca",lat:42.145989,lon:-0.345782},
       {name:"Vega Cañada",lat:36.942000,lon:2.134040}
     ]
   },
