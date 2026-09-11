@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Nueva App (ejemplo)</title>
+
+<!--
+  ══════════════════════════════════════════════════════════════════
+  Mini-lanzador instalable de "Nueva App (ejemplo)".
+  No es la herramienta en sí: es una página mínima, propia de Savian
+  Apps, cuyo único trabajo es:
+    1) Si ya está instalada (abierta desde su icono en el escritorio/
+       pantalla de inicio) -> te manda directa a la web real, sin
+       enseñar nada de esto.
+    2) Si NO está instalada todavía (la abriste desde el botón
+       "Descargar" del hub) -> te enseña cómo instalarla, con el
+       nombre y el logo de "Nueva App (ejemplo)".
+  Así cada app puede tener su propio icono independiente en el
+  escritorio/pantalla de inicio, aunque en realidad todas sean webs.
+  ══════════════════════════════════════════════════════════════════
+-->
+
+<link rel="manifest" href="interno_manifest.json" />
+<meta name="theme-color" content="#788a8f" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="NuevaApp" />
+<link rel="apple-touch-icon" href="interno_apple-touch-icon.png" />
+<link rel="icon" href="interno_favicon.png" sizes="64x64" type="image/png" />
+
+<style>
+  :root{ --theme: #788a8f; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    min-height:100%;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--theme);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:#fff;
+    padding: 24px;
+    padding-top: calc(24px + env(safe-area-inset-top));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+  .box{
+    width:100%; max-width:380px;
+    background: rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.22);
+    border-radius:24px;
+    padding:28px 24px;
+    text-align:center;
+    backdrop-filter: blur(6px);
+  }
+  .box img{
+    width:88px; height:88px; border-radius:22px;
+    background:#fff;
+    padding:8px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.25);
+  }
+  .box h1{ font-size:19px; margin:16px 0 4px; }
+  .box p{ font-size:13.5px; line-height:1.5; color:rgba(255,255,255,0.85); margin:0 0 18px; }
+  .btn{
+    display:block; width:100%;
+    padding:13px 16px; margin-top:10px;
+    border-radius:14px; border:none;
+    font-size:14.5px; font-weight:600;
+    text-decoration:none; cursor:pointer;
+  }
+  .btn-primary{ background:#fff; color: var(--theme); }
+  .btn-ghost{ background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.45); }
+  .steps{ text-align:left; font-size:13px; line-height:1.6; color:rgba(255,255,255,0.9); margin:14px 0 0; padding-left:18px; }
+  .back{ display:inline-block; margin-top:18px; font-size:12.5px; color:rgba(255,255,255,0.75); text-decoration:none; }
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <img src="interno_icon-512.png" alt="" />
+    <h1>Nueva App (ejemplo)</h1>
+    <p id="msg">Instala NuevaApp en tu pantalla de inicio para abrirla como una app, con su propio icono.</p>
+
+    <button id="install-btn" class="btn btn-primary hidden" type="button">Instalar NuevaApp</button>
+    <ol id="ios-steps" class="steps hidden">
+      <li>Toca el icono de compartir <strong>⬆️</strong> en la barra de Safari.</li>
+      <li>Elige <strong>"Añadir a pantalla de inicio"</strong>.</li>
+      <li>Confirma arriba a la derecha.</li>
+    </ol>
+    <ol id="generic-steps" class="steps hidden">
+      <li>Abre el menú del navegador (⋮ o •••).</li>
+      <li>Toca <strong>"Instalar aplicación"</strong> o <strong>"Añadir a pantalla de inicio"</strong>.</li>
+    </ol>
+
+    <a class="btn btn-ghost" href="https://ejemplo.savian.ai/">Abrir sin instalar</a>
+    <a class="back" href="../../interno_index.html">← Volver a Savian Apps</a>
+  </div>
+
+<script>
+  // ── EJEMPLO DE CONFIGURACIÓN: esto es lo único que cambia de una
+  // app a otra. Si copias esta carpeta para una app nueva, ajusta
+  // solo esta constante (y los textos de arriba, y el manifest.json,
+  // y los iconos) — el resto del script es siempre igual.
+  const APP_URL = "https://ejemplo.savian.ai/";
+
+  function isStandalone(){
+    return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+  }
+
+  if (isStandalone()){
+    // Ya está instalada: esta pantalla no se ve nunca, pasamos directos a la herramienta real.
+    location.replace(APP_URL);
+  } else {
+    const ua = navigator.userAgent;
+    const isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const installBtn = document.getElementById("install-btn");
+    let deferredPrompt = null;
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.classList.remove("hidden");
+    });
+
+    installBtn.addEventListener("click", async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.classList.add("hidden");
+    });
+
+    if (isIOS){
+      document.getElementById("ios-steps").classList.remove("hidden");
+    } else {
+      // Si a los 2s Chrome no ha ofrecido el prompt nativo, mostramos el paso a paso manual.
+      setTimeout(() => {
+        if (!deferredPrompt) document.getElementById("generic-steps").classList.remove("hidden");
+      }, 2000);
+    }
+  }
+</script>
+</body>
+</html>

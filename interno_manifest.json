@@ -1,0 +1,52 @@
+{
+  "name": "Savian Apps",
+  "short_name": "Savian Apps",
+  "description": "Acceso rápido a las herramientas internas de Savian: Tickets, Jornada, Guardian, Portal y SavianDM.",
+  "id": "/interno_savian_apps/",
+  "start_url": "./interno_index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#ffffff",
+  "theme_color": "#0fa3a4",
+  "orientation": "portrait-primary",
+  "lang": "es",
+  "dir": "ltr",
+  "icons": [
+    { "src": "interno_icons/interno_icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "interno_icons/interno_icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "interno_icons/interno_icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tickets internos",
+      "short_name": "Tickets",
+      "url": "./interno_apps/interno_tickets/interno_index.html",
+      "icons": [{ "src": "interno_assets/interno_tickets-card.png", "sizes": "256x256", "type": "image/png" }]
+    },
+    {
+      "name": "JORNADA",
+      "short_name": "Jornada",
+      "url": "./interno_apps/interno_jornada/interno_index.html",
+      "icons": [{ "src": "interno_assets/interno_jornada-card.png", "sizes": "256x256", "type": "image/png" }]
+    },
+    {
+      "name": "Savian Guardian",
+      "short_name": "Guardian",
+      "url": "./interno_apps/interno_guardian/interno_index.html",
+      "icons": [{ "src": "interno_assets/interno_guardian-card.png", "sizes": "256x256", "type": "image/png" }]
+    },
+    {
+      "name": "Portal Savian",
+      "short_name": "Portal",
+      "url": "./interno_apps/interno_portal/interno_index.html",
+      "icons": [{ "src": "interno_assets/interno_portal-card.png", "sizes": "256x256", "type": "image/png" }]
+    },
+    {
+      "name": "SavianDM",
+      "short_name": "SavianDM",
+      "url": "./interno_apps/interno_saviandm/interno_index.html",
+      "icons": [{ "src": "interno_assets/interno_saviandm-card.png", "sizes": "256x256", "type": "image/png" }]
+    }
+  ]
+}

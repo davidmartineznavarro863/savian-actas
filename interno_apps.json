@@ -1,0 +1,54 @@
+{
+  "apps": [
+    {
+      "id": "tickets",
+      "name": "Tickets internos",
+      "shortName": "Tickets",
+      "description": "Gestiona y consulta tus incidencias y solicitudes internas.",
+      "url": "https://app-saviansensor-manager-bdafetg6d6hrhyfh.northeurope-01.azurewebsites.net/tickets/",
+      "themeColor": "#0b6f86",
+      "cardIcon": "interno_assets/interno_tickets-card.png",
+      "installPath": "interno_apps/interno_tickets/interno_index.html"
+    },
+    {
+      "id": "jornada",
+      "name": "JORNADA",
+      "shortName": "Jornada",
+      "description": "Registra tu jornada y consulta tus partes de trabajo.",
+      "url": "https://app-saviansensor-manager-bdafetg6d6hrhyfh.northeurope-01.azurewebsites.net/mi-trabajo/partes#splash",
+      "themeColor": "#0b6f86",
+      "cardIcon": "interno_assets/interno_jornada-card.png",
+      "installPath": "interno_apps/interno_jornada/interno_index.html"
+    },
+    {
+      "id": "guardian",
+      "name": "Savian Guardian",
+      "shortName": "Guardian",
+      "description": "Supervisión y seguridad de tus dispositivos y procesos.",
+      "url": "https://my.savian.ai/guardian",
+      "themeColor": "#00b6a0",
+      "cardIcon": "interno_assets/interno_guardian-card.png",
+      "installPath": "interno_apps/interno_guardian/interno_index.html"
+    },
+    {
+      "id": "portal",
+      "name": "Portal Savian",
+      "shortName": "Portal",
+      "description": "Tu portal general de acceso a los servicios de Savian.",
+      "url": "https://portal.savian.ai",
+      "themeColor": "#0fa3a4",
+      "cardIcon": "interno_assets/interno_portal-card.png",
+      "installPath": "interno_apps/interno_portal/interno_index.html"
+    },
+    {
+      "id": "saviandm",
+      "name": "SavianDM",
+      "shortName": "SavianDM",
+      "description": "Panel de control (dashboard) de SavianDM.",
+      "url": "https://saviandm.tijolab.com/dashboard",
+      "themeColor": "#0fa3a4",
+      "cardIcon": "interno_assets/interno_saviandm-card.png",
+      "installPath": "interno_apps/interno_saviandm/interno_index.html"
+    }
+  ]
+}
