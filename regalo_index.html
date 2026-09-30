@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#260e19">
+  <meta name="description" content="Una pequeña sorpresa, preparada con mucho cariño. Solo para ti.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Una sorpresa, solo para ti ♡</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23260e19'/%3E%3Ctext x='32' y='47' text-anchor='middle' font-size='48' fill='%23e3bd83'%3E%E2%99%A1%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="regalo_estilo.css">
+  <script src="regalo_sorpresa.js" defer></script>
+</head>
+<body class="prelude">
+  <div class="grain" aria-hidden="true"></div>
+  <div id="confetti" aria-hidden="true"></div>
+  <header class="masthead"><span class="brand"><span aria-hidden="true">♡</span> SOLO PARA TI</span><button class="sound" id="sound" type="button" aria-pressed="false">Sonido: no</button></header>
+  <main>
+    <section id="game-screen" class="screen game-screen" aria-labelledby="game-title">
+      <div class="game-intro"><p class="eyebrow">HOY LA PROTAGONISTA ERES TÚ</p><h1 id="game-title" tabindex="-1">Antes de tu regalo,<br> <em>un poquito de juego.</em></h1><p class="lead">Encuentra las tres parejas<br> y descubre lo que viene después.</p></div>
+      <div class="game-board"><div class="game-board-top"><span>HECHO PARA TI</span><span aria-hidden="true">♡</span></div><div id="cards" class="cards"></div><p id="game-status" aria-live="polite">Quedan 3 parejas por descubrir.</p><p class="game-foot">Sin reloj, sin prisas. Hoy mandas tú.</p></div>
+      <p class="prelude-foot">UNA PEQUEÑA SORPRESA ESTÁ A PUNTO DE EMPEZAR</p>
+    </section>
+    <section id="birthday-screen" class="screen birthday-screen" aria-labelledby="birthday-title" hidden>
+      <p class="eyebrow">PIDE UN DESEO, CUMPLEAÑERA</p><h1 id="birthday-title" tabindex="-1">25 vueltas al sol.<br> <em>Y lo mejor está por venir.</em></h1>
+      <div class="birthday-scene"><div class="cake-glow" aria-hidden="true"></div><img class="birthday-cake" src="regalo_tarta.png" width="1024" height="1024" alt="Tarta de cumpleaños con las velas doradas 25 encendidas"><button id="little-gift" class="little-gift" type="button" aria-label="Abrir la cajita que está al lado de la tarta"><span class="little-gift-hint">Psst… esto es para ti ♡</span><img src="regalo_caja.png" width="720" height="720" alt="Una pequeña caja de regalo burdeos con lazo dorado"><span class="little-gift-label">TOCA TU REGALITO</span></button></div>
+      <p class="birthday-wish">Feliz cumpleaños, mi persona favorita. <span aria-hidden="true">♡</span></p>
+    </section>
+    <section id="box-screen" class="screen intro" aria-labelledby="intro-title" hidden>
+      <div class="intro-copy"><p class="eyebrow">HAY ALGO QUE QUIERO DARTE</p><h1 id="intro-title" tabindex="-1">Lo bonito<br> se hace <em>esperar.</em></h1><p class="lead">Y esta pequeña caja<br> guarda algo muy bonito para ti.</p><span class="small-love">Hecho con una dosis extra de cariño <span aria-hidden="true">♡</span></span></div>
+      <div class="gift-area"><div class="orbit" aria-hidden="true"></div><span class="spark spark-one" aria-hidden="true">✧</span><span class="spark spark-two" aria-hidden="true">✦</span><span class="gift-caption" aria-hidden="true">un poquito de paciencia…</span><button id="gift" class="gift" type="button" aria-label="Toca la caja para abrir tu regalo. Faltan 18 toques."><img src="regalo_caja.png" alt="Una caja de regalo burdeos con un lazo dorado" width="720" height="720" fetchpriority="high"><span class="gift-tap">TOCA LA CAJITA <span aria-hidden="true">♡</span></span></button><div class="opening-progress"><p id="tap-message" aria-live="polite">Los regalos buenos se abren con ganas.</p><div class="progress-track" role="progressbar" aria-label="Progreso para abrir el regalo" aria-valuemin="0" aria-valuemax="18" aria-valuenow="0"><span id="progress-fill"></span></div><p class="count"><span id="count">0</span> / 18 toquecitos de amor</p></div></div>
+    </section>
+    <section id="envelope-screen" class="screen envelope-screen" aria-labelledby="envelope-title" hidden>
+      <p class="eyebrow">LAS MEJORES COSAS EMPIEZAN ASÍ</p><h1 id="envelope-title" tabindex="-1">Antes, unas <em>palabras.</em></h1><p class="lead">Hay una nota con tu nombre.<br> Bueno, con algo todavía mejor.</p>
+      <button id="envelope" class="envelope" type="button" aria-label="Abre el sobre y lee la nota"><span class="envelope-paper">Para mi persona favorita</span><span class="envelope-fold"></span><span class="seal" aria-hidden="true">♡</span></button><p class="envelope-instruction">Toca el corazón para abrir el sobre</p>
+    </section>
+    <section id="note-screen" class="screen note-screen" aria-labelledby="note-title" hidden>
+      <article class="letter"><span class="letter-mark" aria-hidden="true">♡</span><p class="eyebrow">UNA NOTA PARA TI</p><h1 id="note-title" tabindex="-1">Nalgona,</h1><p>Este año he decidido dejar los regalos de Temu en el carrito, para regalarte este regalito.</p><p>Y no me refiero al pareado que me acabo de tirar, me refiero a la experiencia que te voy a regalar.</p><p class="signature">Besos,<br> tu amado y querido guapetón</p><div class="letter-bottom"><button id="reveal" class="button dark-button" type="button">Quitar la nota y descubrirlo</button></div></article>
+    </section>
+    <section id="reveal-screen" class="reveal-screen" aria-labelledby="reveal-title" hidden>
+      <div class="reveal-hero"><img src="regalo_aire.png" class="pool-photo" alt="Baños de AIRE Almería, con una piscina entre paredes de ladrillo y velas" width="1536" height="1024"><div class="hero-shade"></div><div class="hero-copy"><p class="eyebrow">AHORA SÍ. TU REGALO.</p><h1 id="reveal-title" tabindex="-1">Un respiro.<br> Un mimo.<br> <em>Un momento para ti.</em></h1><p>Baños termales y un masaje relajante<br> en AIRE Ancient Baths Almería.</p><a class="discover-link" href="#experience">Descubre tu experiencia <span aria-hidden="true">↓</span></a></div><span class="hero-side">EL LUJO DE PARAR EL TIEMPO</span></div>
+      <div id="experience" class="experience"><div class="experience-heading"><p class="eyebrow">TE MERECES ESTO, Y MUCHO MÁS</p><h2>Modo desconexión: <em>activado.</em></h2><p>Agua calentita, luz de velas y ese maravilloso<br class="desktop-break"> momento en el que no tienes que hacer absolutamente nada.</p></div>
+        <div class="experience-grid"><figure class="massage-photo"><img src="regalo_masaje.png" alt="Masaje corporal relajante en un ambiente cálido" width="1536" height="1024" loading="lazy"><figcaption>Tu única tarea: dejarte cuidar.</figcaption></figure><article class="ticket"><div class="ticket-top"><span>UNA EXPERIENCIA PARA RECORDAR</span><span aria-hidden="true">✦</span></div><p class="eyebrow">AIRE · ALMERÍA</p><h3>Ancient<br> <em>Relaxing Massage</em></h3><p class="ticket-description">El regalo perfecto para bajar el ritmo<br> y disfrutar con todos los sentidos.</p><dl><div><dt>El plan</dt><dd>Baños termales + masaje</dd></div><div><dt>El masaje</dt><dd>30 minutos de relax</dd></div><div><dt>La experiencia</dt><dd>120 minutos en total</dd></div><div class="date-row"><dt>La fecha</dt><dd>La elegimos juntos ♡</dd></div></dl><p class="ticket-foot">Un regalo pensado con mucho cariño.<br> La fecha y la reserva quedan por concretar.</p></article></div>
+        <div class="closing"><span class="closing-star" aria-hidden="true">✧</span><h2>Menos cosas.<br> <em>Más momentos bonitos.</em></h2><p>Y este es solo para ti.</p><div class="closing-actions"><button id="read-note" class="text-button" type="button">Volver a leer la nota</button></div></div>
+      </div><footer class="reveal-footer"><span>CON AMOR, DE MÍ PARA TI.</span><button id="restart" class="text-button" type="button">Volver a empezar la sorpresa</button></footer>
+    </section>
+  </main>
+  <nav class="journey" aria-label="Pasos de la sorpresa"><span class="current" id="step-1" aria-current="step">01 <b>LA CAJA</b></span><i></i><span id="step-2">02 <b>LA NOTA</b></span><i></i><span id="step-3">03 <b>LA SORPRESA</b></span></nav>
+  <noscript><div class="no-js">Para abrir la sorpresa, activa JavaScript en tu navegador.</div></noscript>
+</body>
+</html>

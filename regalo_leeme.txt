@@ -1,0 +1,43 @@
+TU SORPRESA ESTÁ LISTA
+
+Abre regalo_index.html con doble clic para verla en tu ordenador.
+Funciona sin instalar nada y sin conexión a Internet.
+
+PARA SUBIRLA A TU DOMINIO
+1. Sube juntos regalo_index.html, regalo_estilo.css, regalo_sorpresa.js,
+   regalo_caja.png, regalo_tarta.png, regalo_aire.png y regalo_masaje.png a una misma carpeta.
+2. Abre https://tu-dominio.com/tu-carpeta/regalo_index.html
+3. Si quieres que se abra directamente al entrar a esa carpeta, renombra
+   únicamente regalo_index.html a index.html en el servidor.
+   Los demás nombres deben permanecer iguales.
+No necesitas subir este archivo de instrucciones.
+
+QUÉ INCLUYE
+- Juego inicial obligatorio de tres parejas.
+- Tarta con velas de 25 años y una pequeña caja que inicia el regalo.
+- Caja de regalo que se abre después de 18 toques.
+- Sobre, nota cariñosa y revelación de la experiencia.
+- Baños termales y masaje en AIRE Ancient Baths Almería.
+- Sonidos opcionales.
+- Diseño adaptable a móvil, tablet y ordenador.
+- Controles de teclado y respeto a la preferencia de reducir animaciones.
+
+DATOS DEL REGALO
+Se han usado 30 minutos de masaje y 120 minutos de experiencia total,
+tal como aparecen seleccionados en tu captura. Cambia esos dos textos
+en regalo_index.html si finalmente eliges otra duración.
+La fecha y la reserva se indican como pendientes de concretar.
+Esta web presenta el regalo; no hace ninguna reserva ni genera un bono oficial.
+
+PERSONALIZAR
+regalo_inicio.html conserva el acceso antiguo y redirige a regalo_index.html.
+
+La carta y los textos están en regalo_index.html.
+Los colores y el diseño están en regalo_estilo.css.
+No hay servicios externos, cuentas, cookies, analítica ni formularios.
+Al recargar, la sorpresa comienza desde cero.
+
+FOTOS
+Las imágenes facilitadas se han limpiado con IA para retirar textos y botones.
+Se conserva la composición general, con pequeños cambios en los detalles
+reconstruidos. Los precios y elementos comerciales no aparecen en la sorpresa.
